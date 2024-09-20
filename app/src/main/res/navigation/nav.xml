@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav"
+    app:startDestination="@id/preview">
+
+    <fragment
+        android:id="@+id/previewFragment"
+        android:name="ru.netology.map.ui.theme.PreviewFragment"
+        android:label="Preview"
+        tools:layout="@layout/preview" />
+
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="ru.netology.map.ui.theme.MapFragment"
+        android:label="Map"
+        tools:layout="@layout/map"/>
+
+    <action
+        android:id="@+id/action_previewFragment_to_mapFragment"
+        app:destination="@id/mapFragment"/>
+
+</navigation>
