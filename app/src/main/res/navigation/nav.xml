@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav"
-    app:startDestination="@id/preview">
+    app:startDestination="@id/previewFragment"
+   >
 
     <fragment
         android:id="@+id/previewFragment"
@@ -15,10 +16,19 @@
         android:id="@+id/mapFragment"
         android:name="ru.netology.map.ui.theme.MapFragment"
         android:label="Map"
-        tools:layout="@layout/map"/>
+        tools:layout="@layout/fragment_map"/>
 
     <action
         android:id="@+id/action_previewFragment_to_mapFragment"
         app:destination="@id/mapFragment"/>
+
+    <fragment
+        android:id="@+id/marks_menu_fragment"
+        android:name="ru.netology.map.ui.theme.MarksMenuFragment"
+        android:label="Menu"
+        tools:layout="@layout/marks_menu"/>
+    <action
+        android:id="@+id/action_mapFragment_to_MarksMenuFragment"
+        app:destination="@+id/marks_menu_fragment"/>
 
 </navigation>

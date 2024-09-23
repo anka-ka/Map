@@ -52,6 +52,8 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        viewBinding = true
+
         compose = true
     }
     composeOptions {
@@ -67,8 +69,9 @@ android {
 
 dependencies {
     implementation (libs.maps.mobile.v480lite)
-    // full version provides the rest of maps API routing, panoramas, search and etc.
     implementation (libs.maps.mobile.v480full)
+
+    implementation (libs.gson)
 
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx.v253)

@@ -3,31 +3,23 @@ package ru.netology.map
 
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
-
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import com.yandex.mapkit.MapKitFactory
 
 
-
-class AppActivity : AppCompatActivity(R.layout.preview) {
+class AppActivity : AppCompatActivity(R.layout.app_activity) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         val MAPS_API_KEY = "2af4be20-1874-4d43-b589-a70c7cfd7738"
         MapKitFactory.setApiKey(MAPS_API_KEY)
         MapKitFactory.initialize(this)
 
-
-        setContentView(R.layout.preview)
-
         requestLocationPermission()
-
 
    }
 
