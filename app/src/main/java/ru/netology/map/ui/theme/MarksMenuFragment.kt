@@ -44,10 +44,11 @@ class MarksMenuFragment : Fragment(R.layout.marks_menu) {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         viewModel.markers.observe(viewLifecycleOwner) { markers ->
+            val mutableMarkers = markers.toMutableList()
 
 
             adapter = MarkerAdapter(
-                markers,
+                mutableMarkers,
                 onEdit = { marker -> showEditDialog(marker) },
                 onRemove = { marker ->
                     viewModel.removeMarker(
@@ -57,6 +58,10 @@ class MarksMenuFragment : Fragment(R.layout.marks_menu) {
                 }
             )
             recyclerView.adapter = adapter
+        }
+
+        viewModel.markers.observe(viewLifecycleOwner) { markers ->
+            adapter.updateMarkers(markers)
         }
     }
 

@@ -112,34 +112,38 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
             findNavController().navigate(R.id.action_mapFragment_to_MarksMenuFragment)
         }
 
+        markersData.observe(viewLifecycleOwner) { markerList ->
+            markerList.forEach { (point, description) ->
+                viewModel.setMarker(mapView, point, R.drawable.baseline_location_pin_24_red, requireContext())
+            }
+        }
+
     }
 
+    private fun addMarkerAndSave(point: Point, markerName: String) {
 
+        viewModel.setMarker(
+            mapView,
+            point,
+            R.drawable.baseline_location_pin_24_red,
+            requireContext()
+        )
 
-//    private fun addMarkerAtLocation(point: Point, markerName: String) {
-//        val placemark = viewModel.setMarker(mapView, point, R.drawable.baseline_location_pin_24_red, requireContext())
-//        val currentData = markersData.value ?: mutableListOf()
-//        currentData.add(Pair(point, markerName))
-//        markersData.value = currentData
-//        saveMarkers()
-//    }
-private fun addMarkerAndSave(point: Point, markerName: String) {
+        val currentData = markersData.value ?: mutableListOf()
+        currentData.add(Pair(point, markerName))
 
-    viewModel.setMarker(mapView, point, R.drawable.baseline_location_pin_24_red, requireContext())
+        markersData.value = currentData
 
-    val currentData = markersData.value ?: mutableListOf()
-    currentData.add(Pair(point, markerName))
+        val sharedPreferences =
+            requireActivity().getSharedPreferences("markers", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
 
-    markersData.value = currentData
+        val json = Gson().toJson(currentData.map { Marker(it.first, it.second) })
+        Log.d("Markers", "Saving markers: $json")
+        editor.putString("marker_list", json)
+        editor.apply()
+    }
 
-    val sharedPreferences = requireActivity().getSharedPreferences("markers", Context.MODE_PRIVATE)
-    val editor = sharedPreferences.edit()
-
-    val json = Gson().toJson(currentData.map { Marker(it.first, it.second) })
-    Log.d("Markers", "Saving markers: $json")
-    editor.putString("marker_list", json)
-    editor.apply()
-}
 
     private fun showMarkerInputDialog(point: Point) {
         val builder = AlertDialog.Builder(requireContext())
@@ -157,16 +161,6 @@ private fun addMarkerAndSave(point: Point, markerName: String) {
 
         builder.show()
     }
-//    private fun saveMarkers() {
-//        val sharedPreferences = requireActivity().getSharedPreferences("markers", Context.MODE_PRIVATE)
-//        val editor = sharedPreferences.edit()
-//        val currentData = markersData.value ?: return
-//
-//        val json = Gson().toJson(currentData.map { Marker(it.first, it.second) })
-//        Log.d("Markers", "Saving markers: $json")
-//        editor.putString("marker_list", json)
-//        editor.apply()
-//    }
 
     private fun loadMarkers() {
         val sharedPreferences = requireActivity().getSharedPreferences("markers", Context.MODE_PRIVATE)

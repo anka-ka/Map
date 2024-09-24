@@ -12,7 +12,7 @@ import ru.netology.map.dto.Marker
 
 
 class MarkerAdapter(
-    private val markers: List<Marker>,
+    private val markers: MutableList<Marker>,
     private val onEdit: (Marker) -> Unit,
     private val onRemove: (Marker) -> Unit
 ) : RecyclerView.Adapter<MarkerAdapter.MarkerViewHolder>() {
@@ -65,4 +65,10 @@ class MarkerAdapter(
     }
 
     override fun getItemCount(): Int = markers.size
+
+    fun updateMarkers(newMarkers: List<Marker>) {
+        this.markers.clear()
+        this.markers.addAll(newMarkers)
+        notifyDataSetChanged()
+    }
 }

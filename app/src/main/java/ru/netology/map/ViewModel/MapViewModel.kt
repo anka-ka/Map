@@ -24,7 +24,7 @@ class MapViewModel(private val repository: MapRepository) : ViewModel() {
     val placemark: LiveData<PlacemarkMapObject> = _placemark
 
     private val _markers = MutableLiveData<List<Marker>>()
-    val markers: LiveData<List<Marker>> get() = _markers
+    val markers: MutableLiveData<List<Marker>> get() = _markers
 
     init {
         _markers.value = emptyList()
@@ -77,51 +77,39 @@ class MapViewModel(private val repository: MapRepository) : ViewModel() {
         _markers.value = emptyList()
     }
 
-    fun updateMarkerDescription(marker: Marker, newDescription: String, sharedPreferences: SharedPreferences) {
-
+    fun updateMarkerDescription(
+        marker: Marker,
+        newDescription: String,
+        sharedPreferences: SharedPreferences
+    ) {
         val updatedMarker = marker.copy(description = newDescription)
         viewModelScope.launch {
             repository.updateMarker(updatedMarker, sharedPreferences)
-            loadMarkers(repository.getSavedMarkers(sharedPreferences))
-        }
-    }
-    fun saveMarkersToPreferences(sharedPreferences: SharedPreferences, markers: List<Marker>) {
-        val editor = sharedPreferences.edit()
-        val markersJson = Gson().toJson(markers)
-        editor.putString("markers", markersJson)
-        editor.apply()
-
-        Log.d("SaveMarkers", "Сохраненные маркеры: $markersJson")
-    }
-
-    fun loadMarkersFromPreferences(sharedPreferences: SharedPreferences): List<Marker> {
-        val markersJson = sharedPreferences.getString("markers", null)
-        Log.d("LoadMarkers", "Загруженные маркеры: $markersJson")
-        return if (markersJson.isNullOrEmpty()) {
-            emptyList()
-        } else {
-            Gson().fromJson(markersJson, object : TypeToken<List<Marker>>() {}.type)
+            _markers.value =
+                _markers.value?.map { if (it.point == updatedMarker.point) updatedMarker else it }
         }
     }
 
     fun removeMarker(marker: Marker, sharedPreferences: SharedPreferences) {
         val currentMarkers = _markers.value?.toMutableList() ?: mutableListOf()
-
         Log.d("RemoveMarker", "Текущие маркеры до удаления: $currentMarkers")
         Log.d("RemoveMarker", "Маркер для удаления: ${marker.description}")
 
-        if (currentMarkers.contains(marker)) {
-            currentMarkers.remove(marker)
+        if (currentMarkers.remove(marker)) {
             _markers.value = currentMarkers
             Log.d("RemoveMarker", "Маркер удален: ${marker.description}")
+            saveMarkersToPreferences(sharedPreferences, currentMarkers)
         } else {
             Log.d("RemoveMarker", "Маркер не найден для удаления")
         }
+    }
 
-        saveMarkersToPreferences(sharedPreferences, currentMarkers)
-
-        val savedMarkers = sharedPreferences.getString("markers", "")
-        Log.d("RemoveMarker", "Сохраненные маркеры после удаления: $savedMarkers")
+    private fun saveMarkersToPreferences(sharedPreferences: SharedPreferences, markers: List<Marker>) {
+        val editor = sharedPreferences.edit()
+        val markersJson = Gson().toJson(markers)
+        editor.putString("marker_list", markersJson)
+        editor.apply()
+        Log.d("SaveMarkers", "Сохраненные маркеры: $markersJson")
     }
 
 }
