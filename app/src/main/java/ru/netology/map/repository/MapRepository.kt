@@ -1,8 +1,11 @@
 package ru.netology.map.repository
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import androidx.core.content.ContextCompat
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
@@ -11,6 +14,7 @@ import com.yandex.mapkit.map.PlacemarkMapObject
 import com.yandex.mapkit.mapview.MapView
 import com.yandex.runtime.image.ImageProvider
 import ru.netology.map.R
+import ru.netology.map.dto.Marker
 
 
 class MapRepository {
@@ -100,5 +104,28 @@ class MapRepository {
             Animation(Animation.Type.SMOOTH, 0.5f),
             null
         )
+    }
+
+    fun getSavedMarkers(sharedPreferences: SharedPreferences): List<Marker> {
+        val json = sharedPreferences.getString("marker_list", "[]") ?: "[]"
+        val type = object : TypeToken<List<Marker>>() {}.type
+        return Gson().fromJson(json, type)
+    }
+
+    fun updateMarker(updatedMarker: Marker, sharedPreferences: SharedPreferences) {
+
+        val currentMarkers = getSavedMarkers(sharedPreferences).toMutableList()
+        val index = currentMarkers.indexOfFirst { it.point == updatedMarker.point }
+        if (index != -1) {
+
+            currentMarkers[index] = updatedMarker
+            saveMarkers(currentMarkers, sharedPreferences)
+        }
+    }
+
+
+    private fun saveMarkers(markers: List<Marker>, sharedPreferences: SharedPreferences) {
+        val json = Gson().toJson(markers)
+        sharedPreferences.edit().putString("marker_list", json).apply()
     }
 }

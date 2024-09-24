@@ -3,4 +3,10 @@
     <string name="welcome_to">Welcome to</string>
     <string name="map">MAP</string>
     <string name="go">Go</string>
+    <string name="list">Список мест для моего путешествия</string>
+    <string name="marker_description">Marker description</string>
+    <string name="menu">Menu</string>
+    <string name="Edit">Редактировать</string>
+    <string name="Remove">Удалить</string>
+    <string name="Save">Сохранить</string>
 </resources>

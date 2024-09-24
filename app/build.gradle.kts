@@ -73,6 +73,8 @@ dependencies {
 
     implementation (libs.gson)
 
+    implementation (libs.androidx.swiperefreshlayout)
+
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx.v253)
     implementation(libs.androidx.navigation.fragment.ktx.v260)
@@ -86,6 +88,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.swiperefreshlayout)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -3,6 +3,7 @@ package ru.netology.map.ui.theme
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,9 +17,12 @@ import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
 import androidx.navigation.fragment.findNavController
+import com.yandex.mapkit.layers.GeoObjectTapEvent
+import com.yandex.mapkit.layers.GeoObjectTapListener
 import com.yandex.mapkit.map.CameraListener
 import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.map.CameraUpdateReason
+import com.yandex.mapkit.map.GeoObjectSelectionMetadata
 import com.yandex.mapkit.map.InputListener
 import com.yandex.mapkit.map.Map
 import com.yandex.mapkit.mapview.MapView
@@ -55,11 +59,8 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
 
         mapView = binding.mapView
         val repository = MapRepository()
-        viewModel =
-            ViewModelProvider(this, MapViewModelFactory(repository)).get(MapViewModel::class.java)
-
-        viewModel = ViewModelProvider(this).get(MapViewModel::class.java)
-        loadMarkers()
+        viewModel = ViewModelProvider(requireActivity(), MapViewModelFactory(repository))
+            .get(MapViewModel::class.java)
 
         markersData.value = mutableListOf()
         loadMarkers()
@@ -76,17 +77,17 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
         mapView.map.addCameraListener(this)
 
 
-//        mapView.map.addTapListener(object : GeoObjectTapListener {
-//            override fun onObjectTap(geoObjectTapEvent: GeoObjectTapEvent): Boolean {
-//                val geoObject = geoObjectTapEvent
-//                    .geoObject
-//                    .metadataContainer
-//                    .getItem(GeoObjectSelectionMetadata::class.java)
-//                binding.mapView.map.selectGeoObject(geoObject)
-//                return true
-//
-//            }
-//        })
+        mapView.map.addTapListener(object : GeoObjectTapListener {
+            override fun onObjectTap(geoObjectTapEvent: GeoObjectTapEvent): Boolean {
+                val geoObject = geoObjectTapEvent
+                    .geoObject
+                    .metadataContainer
+                    .getItem(GeoObjectSelectionMetadata::class.java)
+                binding.mapView.map.selectGeoObject(geoObject)
+                return true
+
+            }
+        })
 
         mapView.map.addInputListener(object : InputListener {
 
@@ -115,14 +116,30 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
 
 
 
-    private fun addMarkerAtLocation(point: Point, markerName: String) {
-        val placemark = viewModel.setMarker(mapView, point, R.drawable.baseline_location_pin_24_red, requireContext())
+//    private fun addMarkerAtLocation(point: Point, markerName: String) {
+//        val placemark = viewModel.setMarker(mapView, point, R.drawable.baseline_location_pin_24_red, requireContext())
+//        val currentData = markersData.value ?: mutableListOf()
+//        currentData.add(Pair(point, markerName))
+//        markersData.value = currentData
+//        saveMarkers()
+//    }
+private fun addMarkerAndSave(point: Point, markerName: String) {
 
-        val currentData = markersData.value ?: mutableListOf()
-        currentData.add(Pair(point, markerName))
-        markersData.value = currentData
-        saveMarkers()
-    }
+    viewModel.setMarker(mapView, point, R.drawable.baseline_location_pin_24_red, requireContext())
+
+    val currentData = markersData.value ?: mutableListOf()
+    currentData.add(Pair(point, markerName))
+
+    markersData.value = currentData
+
+    val sharedPreferences = requireActivity().getSharedPreferences("markers", Context.MODE_PRIVATE)
+    val editor = sharedPreferences.edit()
+
+    val json = Gson().toJson(currentData.map { Marker(it.first, it.second) })
+    Log.d("Markers", "Saving markers: $json")
+    editor.putString("marker_list", json)
+    editor.apply()
+}
 
     private fun showMarkerInputDialog(point: Point) {
         val builder = AlertDialog.Builder(requireContext())
@@ -134,21 +151,22 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
             val markerName = input.text.toString()
             val marker = Marker(point, markerName)
             viewModel.addMarker(marker)
-            addMarkerAtLocation(point, markerName)
+            addMarkerAndSave(point, markerName)
         }
         builder.setNegativeButton("Отмена") { dialog, which -> dialog.cancel() }
 
         builder.show()
     }
-    private fun saveMarkers() {
-        val sharedPreferences = requireActivity().getSharedPreferences("markers", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        val currentData = markersData.value ?: return
-
-        val json = Gson().toJson(currentData.map { Marker(it.first, it.second) })
-        editor.putString("marker_list", json)
-        editor.apply()
-    }
+//    private fun saveMarkers() {
+//        val sharedPreferences = requireActivity().getSharedPreferences("markers", Context.MODE_PRIVATE)
+//        val editor = sharedPreferences.edit()
+//        val currentData = markersData.value ?: return
+//
+//        val json = Gson().toJson(currentData.map { Marker(it.first, it.second) })
+//        Log.d("Markers", "Saving markers: $json")
+//        editor.putString("marker_list", json)
+//        editor.apply()
+//    }
 
     private fun loadMarkers() {
         val sharedPreferences = requireActivity().getSharedPreferences("markers", Context.MODE_PRIVATE)
@@ -157,10 +175,15 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
         if (json != null) {
             val type = object : TypeToken<MutableList<Marker>>() {}.type
             val markerList: MutableList<Marker> = Gson().fromJson(json, type)
-
+            Log.d("Markers", "Loaded markers: $json")
+            val currentData = markersData.value ?: mutableListOf()
             markerList.forEach { marker ->
-                addMarkerAtLocation(marker.point, marker.description)
+                currentData.add(Pair(marker.point, marker.description))
+
+                viewModel.setMarker(mapView, marker.point, R.drawable.baseline_location_pin_24_red, requireContext())
             }
+            markersData.value = currentData
+
         }
     }
 
@@ -170,7 +193,6 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
         mapView.onStop()
         MapKitFactory.getInstance().onStop()
         super.onStop()
-        saveMarkers()
     }
 
     override fun onStart() {

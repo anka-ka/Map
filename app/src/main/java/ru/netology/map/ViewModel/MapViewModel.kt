@@ -1,15 +1,21 @@
 package ru.netology.map.ViewModel
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.map.CameraUpdateReason
 import com.yandex.mapkit.map.PlacemarkMapObject
 import com.yandex.mapkit.mapview.MapView
+import kotlinx.coroutines.launch
 import ru.netology.map.dto.Marker
 import ru.netology.map.repository.MapRepository
 
@@ -29,7 +35,6 @@ class MapViewModel(private val repository: MapRepository) : ViewModel() {
         currentList.add(marker)
         _markers.value = currentList
     }
-
 
 
     fun setMarker(mapView: MapView, point: Point, imageResource: Int, context: Context) {
@@ -54,8 +59,6 @@ class MapViewModel(private val repository: MapRepository) : ViewModel() {
         repository.zoomOut(mapView)
     }
 
-
-
     fun moveToMarker(marker: Marker, mapView: MapView) {
 
         val map = mapView.map
@@ -65,6 +68,60 @@ class MapViewModel(private val repository: MapRepository) : ViewModel() {
             Animation(Animation.Type.SMOOTH, 2f),
             null
         )
+    }
+    fun loadMarkers(markers: List<Marker>) {
+        _markers.value = markers
+    }
+
+    fun clearMarkers() {
+        _markers.value = emptyList()
+    }
+
+    fun updateMarkerDescription(marker: Marker, newDescription: String, sharedPreferences: SharedPreferences) {
+
+        val updatedMarker = marker.copy(description = newDescription)
+        viewModelScope.launch {
+            repository.updateMarker(updatedMarker, sharedPreferences)
+            loadMarkers(repository.getSavedMarkers(sharedPreferences))
+        }
+    }
+    fun saveMarkersToPreferences(sharedPreferences: SharedPreferences, markers: List<Marker>) {
+        val editor = sharedPreferences.edit()
+        val markersJson = Gson().toJson(markers)
+        editor.putString("markers", markersJson)
+        editor.apply()
+
+        Log.d("SaveMarkers", "Сохраненные маркеры: $markersJson")
+    }
+
+    fun loadMarkersFromPreferences(sharedPreferences: SharedPreferences): List<Marker> {
+        val markersJson = sharedPreferences.getString("markers", null)
+        Log.d("LoadMarkers", "Загруженные маркеры: $markersJson")
+        return if (markersJson.isNullOrEmpty()) {
+            emptyList()
+        } else {
+            Gson().fromJson(markersJson, object : TypeToken<List<Marker>>() {}.type)
+        }
+    }
+
+    fun removeMarker(marker: Marker, sharedPreferences: SharedPreferences) {
+        val currentMarkers = _markers.value?.toMutableList() ?: mutableListOf()
+
+        Log.d("RemoveMarker", "Текущие маркеры до удаления: $currentMarkers")
+        Log.d("RemoveMarker", "Маркер для удаления: ${marker.description}")
+
+        if (currentMarkers.contains(marker)) {
+            currentMarkers.remove(marker)
+            _markers.value = currentMarkers
+            Log.d("RemoveMarker", "Маркер удален: ${marker.description}")
+        } else {
+            Log.d("RemoveMarker", "Маркер не найден для удаления")
+        }
+
+        saveMarkersToPreferences(sharedPreferences, currentMarkers)
+
+        val savedMarkers = sharedPreferences.getString("markers", "")
+        Log.d("RemoveMarker", "Сохраненные маркеры после удаления: $savedMarkers")
     }
 
 }

@@ -3,20 +3,54 @@ package ru.netology.map.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.map.R
 import ru.netology.map.dto.Marker
 
-class MarkerAdapter(private val markers: List<Marker>, private val onClick: (Marker) -> Unit) :
-    RecyclerView.Adapter<MarkerAdapter.MarkerViewHolder>() {
+
+class MarkerAdapter(
+    private val markers: List<Marker>,
+    private val onEdit: (Marker) -> Unit,
+    private val onRemove: (Marker) -> Unit
+) : RecyclerView.Adapter<MarkerAdapter.MarkerViewHolder>() {
 
     class MarkerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val markerName: TextView = itemView.findViewById(R.id.marker_description)
 
-        fun bind(marker: Marker, onClick: (Marker) -> Unit) {
+        fun bind(marker: Marker, onEdit: (Marker) -> Unit, onRemove: (Marker) -> Unit) {
             markerName.text = marker.description
-            itemView.setOnClickListener { onClick(marker) }
+            itemView.setOnClickListener { onEdit(marker) }
+
+            setupPopupMenu(marker, onEdit, onRemove)
+        }
+
+        private fun setupPopupMenu(
+            marker: Marker,
+            onEdit: (Marker) -> Unit,
+            onRemove: (Marker) -> Unit
+        ) {
+            val menu = itemView.findViewById<ImageButton>(R.id.menu)
+            menu.setOnClickListener {
+                PopupMenu(it.context, it).apply {
+                    inflate(R.menu.options_marks)
+                    setOnMenuItemClickListener { item ->
+                        when(item.itemId) {
+                            R.id.edit -> {
+                                onEdit(marker)
+                                true
+                            }
+                            R.id.remove -> {
+                                onRemove(marker)
+                                true
+                            }
+                            else -> false
+                        }
+                    }
+                }.show()
+            }
         }
     }
 
@@ -27,7 +61,7 @@ class MarkerAdapter(private val markers: List<Marker>, private val onClick: (Mar
     }
 
     override fun onBindViewHolder(holder: MarkerViewHolder, position: Int) {
-        holder.bind(markers[position], onClick)
+        holder.bind(markers[position], onEdit, onRemove)
     }
 
     override fun getItemCount(): Int = markers.size
