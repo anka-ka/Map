@@ -14,15 +14,16 @@ import ru.netology.map.dto.Marker
 class MarkerAdapter(
     private val markers: MutableList<Marker>,
     private val onEdit: (Marker) -> Unit,
-    private val onRemove: (Marker) -> Unit
+    private val onRemove: (Marker) -> Unit,
+    private val onClick: (Marker) -> Unit
 ) : RecyclerView.Adapter<MarkerAdapter.MarkerViewHolder>() {
 
     class MarkerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val markerName: TextView = itemView.findViewById(R.id.marker_description)
 
-        fun bind(marker: Marker, onEdit: (Marker) -> Unit, onRemove: (Marker) -> Unit) {
+        fun bind(marker: Marker, onEdit: (Marker) -> Unit, onRemove: (Marker) -> Unit, onClick: (Marker) -> Unit) {
             markerName.text = marker.description
-            itemView.setOnClickListener { onEdit(marker) }
+            itemView.setOnClickListener { onClick(marker) }
 
             setupPopupMenu(marker, onEdit, onRemove)
         }
@@ -61,7 +62,7 @@ class MarkerAdapter(
     }
 
     override fun onBindViewHolder(holder: MarkerViewHolder, position: Int) {
-        holder.bind(markers[position], onEdit, onRemove)
+        holder.bind(markers[position], onEdit, onRemove, onClick)
     }
 
     override fun getItemCount(): Int = markers.size

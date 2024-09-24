@@ -46,7 +46,6 @@ class MarksMenuFragment : Fragment(R.layout.marks_menu) {
         viewModel.markers.observe(viewLifecycleOwner) { markers ->
             val mutableMarkers = markers.toMutableList()
 
-
             adapter = MarkerAdapter(
                 mutableMarkers,
                 onEdit = { marker -> showEditDialog(marker) },
@@ -55,14 +54,13 @@ class MarksMenuFragment : Fragment(R.layout.marks_menu) {
                         marker,
                         requireActivity().getSharedPreferences("markers", Context.MODE_PRIVATE)
                     )
-                }
+                },
+                onClick = { marker -> onMarkerClick(marker) }
             )
             recyclerView.adapter = adapter
         }
 
-        viewModel.markers.observe(viewLifecycleOwner) { markers ->
-            adapter.updateMarkers(markers)
-        }
+
     }
 
     private fun showEditDialog(marker: Marker) {
@@ -83,6 +81,15 @@ class MarksMenuFragment : Fragment(R.layout.marks_menu) {
             }
             .setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
             .show()
+    }
+
+
+    private fun onMarkerClick(marker: Marker) {
+        Log.d("MarksMenuFragment", "Marker clicked: ${marker.point.latitude}, ${marker.point.longitude}")
+        val bundle = Bundle().apply {
+            putSerializable("marker", marker)
+        }
+        findNavController().navigate(R.id.mapFragment, bundle)
     }
 
 }

@@ -60,15 +60,12 @@ class MapViewModel(private val repository: MapRepository) : ViewModel() {
     }
 
     fun moveToMarker(marker: Marker, mapView: MapView) {
-
-        val map = mapView.map
-        val cameraPosition = CameraPosition(marker.point, 14.0f, 0.0f, 0.0f)
-        map.move(
-            cameraPosition,
-            Animation(Animation.Type.SMOOTH, 2f),
-            null
-        )
+        val point = marker.point
+        Log.d("MapViewModel", "Moving to marker at: ${point.latitude}, ${point.longitude}")
+        val cameraPosition = CameraPosition(point, 17.0f, 0.0f, 0.0f)
+        mapView.map.move(cameraPosition, Animation(Animation.Type.SMOOTH, 5f), null)
     }
+
     fun loadMarkers(markers: List<Marker>) {
         _markers.value = markers
     }
@@ -85,8 +82,10 @@ class MapViewModel(private val repository: MapRepository) : ViewModel() {
         val updatedMarker = marker.copy(description = newDescription)
         viewModelScope.launch {
             repository.updateMarker(updatedMarker, sharedPreferences)
-            _markers.value =
-                _markers.value?.map { if (it.point == updatedMarker.point) updatedMarker else it }
+
+            _markers.postValue(_markers.value?.map {
+                if (it.point == marker.point) updatedMarker else it
+            })
         }
     }
 

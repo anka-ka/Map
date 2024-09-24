@@ -58,6 +58,7 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
         super.onViewCreated(view, savedInstanceState)
 
         mapView = binding.mapView
+
         val repository = MapRepository()
         viewModel = ViewModelProvider(requireActivity(), MapViewModelFactory(repository))
             .get(MapViewModel::class.java)
@@ -65,15 +66,21 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
         markersData.value = mutableListOf()
         loadMarkers()
 
-        var startLocation = Point(59.9402, 30.315)
+        Log.d("MapFragment", "Arguments: ${arguments?.keySet()}")
 
-        mapView.map.move(
-            CameraPosition(startLocation, 17.0f, 0.0f, 0.0f),
-            Animation(Animation.Type.SMOOTH, 5f),
-            null
-        )
+        val marker = arguments?.getSerializable("marker") as? Marker
+        if (marker != null) {
+            viewModel.moveToMarker(marker, mapView)
+        } else {
+            val startLocation = Point(59.9402, 30.315)
+            mapView.map.move(
+                CameraPosition(startLocation, 17.0f, 0.0f, 0.0f),
+                Animation(Animation.Type.SMOOTH, 5f),
+                null
+            )
+            viewModel.setMarker(mapView, startLocation, R.drawable.baseline_location_pin_24, requireContext())
+        }
 
-        viewModel.setMarker(mapView, startLocation, R.drawable.baseline_location_pin_24, requireContext())
         mapView.map.addCameraListener(this)
 
 

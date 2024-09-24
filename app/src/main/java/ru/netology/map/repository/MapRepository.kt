@@ -3,6 +3,7 @@ package ru.netology.map.repository
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -113,13 +114,18 @@ class MapRepository {
     }
 
     fun updateMarker(updatedMarker: Marker, sharedPreferences: SharedPreferences) {
-
         val currentMarkers = getSavedMarkers(sharedPreferences).toMutableList()
-        val index = currentMarkers.indexOfFirst { it.point == updatedMarker.point }
-        if (index != -1) {
 
+        val index = currentMarkers.indexOfFirst {
+            it.point.latitude == updatedMarker.point.latitude &&
+                    it.point.longitude == updatedMarker.point.longitude
+        }
+
+        if (index != -1) {
             currentMarkers[index] = updatedMarker
             saveMarkers(currentMarkers, sharedPreferences)
+        } else {
+            Log.e("MapRepository", "Marker not found for update: $updatedMarker. Current markers: $currentMarkers")
         }
     }
 
