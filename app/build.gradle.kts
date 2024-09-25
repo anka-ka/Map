@@ -19,21 +19,25 @@ android {
         versionName = "1.0"
 
 
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
 
-        val properties = Properties()
-        val file = rootProject.file("maps.properties")
-        if (file.exists()) {
-            file.inputStream().use { inputStream ->
-                properties.load(inputStream)
-            }
+        fun getMapkitApiKey(): String {
+            val properties = Properties()
+            file("maps.properties").inputStream().use { properties.load(it) }
+            return properties.getProperty("MAPKIT_API_KEY", "")
         }
-        manifestPlaceholders["mapsApiKey"] = properties.getProperty("MAPS_API_KEY", "")
+
+        val mapkitApiKey: String = getMapkitApiKey()
+
+        buildConfigField("String", "MAPKIT_API_KEY", "\"$mapkitApiKey\"")
+
+        manifestPlaceholders["MAPKIT_API_KEY"] = mapkitApiKey
     }
+
+
 
     buildTypes {
         release {
@@ -53,7 +57,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
-
+        buildConfig = true
         compose = true
     }
     composeOptions {

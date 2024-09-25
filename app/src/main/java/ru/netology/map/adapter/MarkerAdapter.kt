@@ -67,9 +67,4 @@ class MarkerAdapter(
 
     override fun getItemCount(): Int = markers.size
 
-    fun updateMarkers(newMarkers: List<Marker>) {
-        this.markers.clear()
-        this.markers.addAll(newMarkers)
-        notifyDataSetChanged()
-    }
 }

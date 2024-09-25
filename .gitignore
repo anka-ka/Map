@@ -13,4 +13,4 @@
 .externalNativeBuild
 .cxx
 local.properties
-maps.properties
+app/maps.properties

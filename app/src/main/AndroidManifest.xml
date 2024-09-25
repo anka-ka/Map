@@ -15,25 +15,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Map"
-        tools:targetApi="tiramisu"
-        >
-
+        tools:targetApi="tiramisu">
 
         <activity
             android:name=".AppActivity"
             android:exported="true"
-
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat">
             <nav-graph android:value="@navigation/nav" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <meta-data android:name="ru.yandex.android.geo.API_KEY"
-            android:value="${mapsApiKey}"/>
+
+        <meta-data
+            android:name="ru.yandex.android.geo.API_KEY"
+            android:value="${MAPKIT_API_KEY}"/>
 
     </application>
 

@@ -8,7 +8,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
@@ -61,17 +60,12 @@ class MapViewModel(private val repository: MapRepository) : ViewModel() {
 
     fun moveToMarker(marker: Marker, mapView: MapView) {
         val point = marker.point
-        Log.d("MapViewModel", "Moving to marker at: ${point.latitude}, ${point.longitude}")
         val cameraPosition = CameraPosition(point, 17.0f, 0.0f, 0.0f)
         mapView.map.move(cameraPosition, Animation(Animation.Type.SMOOTH, 5f), null)
     }
 
     fun loadMarkers(markers: List<Marker>) {
         _markers.value = markers
-    }
-
-    fun clearMarkers() {
-        _markers.value = emptyList()
     }
 
     fun updateMarkerDescription(
@@ -91,9 +85,6 @@ class MapViewModel(private val repository: MapRepository) : ViewModel() {
 
     fun removeMarker(marker: Marker, sharedPreferences: SharedPreferences) {
         val currentMarkers = _markers.value?.toMutableList() ?: mutableListOf()
-        Log.d("RemoveMarker", "Текущие маркеры до удаления: $currentMarkers")
-        Log.d("RemoveMarker", "Маркер для удаления: ${marker.description}")
-
         if (currentMarkers.remove(marker)) {
             _markers.value = currentMarkers
             Log.d("RemoveMarker", "Маркер удален: ${marker.description}")
@@ -108,7 +99,6 @@ class MapViewModel(private val repository: MapRepository) : ViewModel() {
         val markersJson = Gson().toJson(markers)
         editor.putString("marker_list", markersJson)
         editor.apply()
-        Log.d("SaveMarkers", "Сохраненные маркеры: $markersJson")
     }
 
 }

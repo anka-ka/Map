@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.yandex.mapkit.MapKitFactory
+import ru.netology.map.BuildConfig.MAPKIT_API_KEY
 
 
 class AppActivity : AppCompatActivity(R.layout.app_activity) {
@@ -14,11 +15,8 @@ class AppActivity : AppCompatActivity(R.layout.app_activity) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-        val MAPS_API_KEY = "2af4be20-1874-4d43-b589-a70c7cfd7738"
-        MapKitFactory.setApiKey(MAPS_API_KEY)
+        MapKitFactory.setApiKey(MAPKIT_API_KEY)
         MapKitFactory.initialize(this)
-
         requestLocationPermission()
 
    }

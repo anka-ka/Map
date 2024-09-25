@@ -66,8 +66,6 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
         markersData.value = mutableListOf()
         loadMarkers()
 
-        Log.d("MapFragment", "Arguments: ${arguments?.keySet()}")
-
         val marker = arguments?.getSerializable("marker") as? Marker
         if (marker != null) {
             viewModel.moveToMarker(marker, mapView)
@@ -146,7 +144,6 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
         val editor = sharedPreferences.edit()
 
         val json = Gson().toJson(currentData.map { Marker(it.first, it.second) })
-        Log.d("Markers", "Saving markers: $json")
         editor.putString("marker_list", json)
         editor.apply()
     }
@@ -176,7 +173,6 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
         if (json != null) {
             val type = object : TypeToken<MutableList<Marker>>() {}.type
             val markerList: MutableList<Marker> = Gson().fromJson(json, type)
-            Log.d("Markers", "Loaded markers: $json")
             val currentData = markersData.value ?: mutableListOf()
             markerList.forEach { marker ->
                 currentData.add(Pair(marker.point, marker.description))
@@ -187,7 +183,6 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
 
         }
     }
-
 
     override fun onStop() {
 

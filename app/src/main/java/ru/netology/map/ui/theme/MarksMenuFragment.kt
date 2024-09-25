@@ -3,7 +3,6 @@ package ru.netology.map.ui.theme
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.EditText
 import androidx.fragment.app.Fragment
@@ -85,7 +84,6 @@ class MarksMenuFragment : Fragment(R.layout.marks_menu) {
 
 
     private fun onMarkerClick(marker: Marker) {
-        Log.d("MarksMenuFragment", "Marker clicked: ${marker.point.latitude}, ${marker.point.longitude}")
         val bundle = Bundle().apply {
             putSerializable("marker", marker)
         }
