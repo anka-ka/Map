@@ -14,7 +14,7 @@
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31")
         classpath("com.google.gms:google-services:4.3.15")
         classpath("com.google.dagger:hilt-android-gradle-plugin:2.48")
-        classpath ("com.android.tools.build:gradle:8.1.0")
+        classpath ("com.android.tools.build:gradle:8.6.0")
 
     }
 
