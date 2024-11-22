@@ -14,34 +14,78 @@ import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.map.CameraUpdateReason
 import com.yandex.mapkit.map.PlacemarkMapObject
 import com.yandex.mapkit.mapview.MapView
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.netology.map.dto.Marker
+import ru.netology.map.entity.MarkerEntity
 import ru.netology.map.repository.MapRepository
+import javax.inject.Inject
 
-class MapViewModel(private val repository: MapRepository) : ViewModel() {
-    private val _placemark = MutableLiveData<PlacemarkMapObject>()
-    val placemark: LiveData<PlacemarkMapObject> = _placemark
+@HiltViewModel
+class MapViewModel @Inject constructor(private val repository: MapRepository) : ViewModel() {
 
     private val _markers = MutableLiveData<List<Marker>>()
-    val markers: MutableLiveData<List<Marker>> get() = _markers
+    val markers: LiveData<List<Marker>> = _markers
 
     init {
-        _markers.value = emptyList()
+        loadMarkers()
+    }
+
+    private fun mapToMarker(markerEntity: MarkerEntity): Marker {
+        return Marker(
+            id = markerEntity.id,
+            description = markerEntity.description,
+            point = Point(markerEntity.latitude, markerEntity.longitude)
+        )
+    }
+    private fun mapToMarkerEntity(marker: Marker): MarkerEntity {
+        return MarkerEntity(
+            id = marker.id,
+            description = marker.description,
+            latitude = marker.point.latitude,
+            longitude = marker.point.longitude
+        )
     }
 
     fun addMarker(marker: Marker) {
-        val currentList = _markers.value?.toMutableList() ?: mutableListOf()
-        currentList.add(marker)
-        _markers.value = currentList
+        viewModelScope.launch {
+            repository.addMarker(marker)
+            _markers.value = repository.getMarkers()
+        }
     }
 
 
-    fun setMarker(mapView: MapView, point: Point, imageResource: Int, context: Context) {
-        val placemark = repository.addPlacemarkAtLocation(mapView, point, imageResource, context)
-        _placemark.value = placemark
+    private fun loadMarkers() {
+        viewModelScope.launch {
+            val markers = repository.getMarkers()
+            _markers.value = markers
+        }
     }
 
-    fun onCameraPositionChanged(
+
+    suspend fun updateMarkerDescription(marker: Marker, newDescription: String) {
+        val updatedMarker = marker.copy(description = newDescription)
+        repository.updateMarker(updatedMarker)
+        loadMarkers()
+    }
+
+
+    fun addPlacemark(mapView: MapView, point: Point, iconRes: Int) {
+        repository.addPlacemarkAtLocation(mapView, point, iconRes)
+    }
+
+
+    fun zoomIn(mapView: MapView) {
+        repository.zoomIn(mapView)
+    }
+
+
+    fun zoomOut(mapView: MapView) {
+        repository.zoomOut(mapView)
+    }
+
+
+    fun handleCameraPositionChanged(
         mapView: MapView,
         cameraPosition: CameraPosition,
         cameraUpdateReason: CameraUpdateReason,
@@ -50,55 +94,39 @@ class MapViewModel(private val repository: MapRepository) : ViewModel() {
         repository.onCameraPositionChanged(mapView, cameraPosition, cameraUpdateReason, finished)
     }
 
-    fun zoomIn(mapView: MapView) {
-        repository.zoomIn(mapView)
-    }
 
-    fun zoomOut(mapView: MapView) {
-        repository.zoomOut(mapView)
-    }
-
-    fun moveToMarker(marker: Marker, mapView: MapView) {
-        val point = marker.point
-        val cameraPosition = CameraPosition(point, 17.0f, 0.0f, 0.0f)
-        mapView.map.move(cameraPosition, Animation(Animation.Type.SMOOTH, 5f), null)
-    }
-
-    fun loadMarkers(markers: List<Marker>) {
-        _markers.value = markers
-    }
-
-    fun updateMarkerDescription(
-        marker: Marker,
-        newDescription: String,
-        sharedPreferences: SharedPreferences
-    ) {
-        val updatedMarker = marker.copy(description = newDescription)
+    fun updateMarkers(marker: Marker, markers: List<Marker>) {
         viewModelScope.launch {
-            repository.updateMarker(updatedMarker, sharedPreferences)
-
-            _markers.postValue(_markers.value?.map {
-                if (it.point == marker.point) updatedMarker else it
-            })
+            val markerEntities = markers.map {
+                MarkerEntity(
+                    id = it.id,
+                    description = it.description,
+                    latitude = marker.point.latitude,
+                    longitude = marker.point.longitude
+                )
+            }
+            repository.saveMarker(markerEntities)
+            _markers.value = markers
         }
     }
 
-    fun removeMarker(marker: Marker, sharedPreferences: SharedPreferences) {
-        val currentMarkers = _markers.value?.toMutableList() ?: mutableListOf()
-        if (currentMarkers.remove(marker)) {
-            _markers.value = currentMarkers
-            Log.d("RemoveMarker", "Маркер удален: ${marker.description}")
-            saveMarkersToPreferences(sharedPreferences, currentMarkers)
-        } else {
-            Log.d("RemoveMarker", "Маркер не найден для удаления")
-        }
-    }
 
-    private fun saveMarkersToPreferences(sharedPreferences: SharedPreferences, markers: List<Marker>) {
-        val editor = sharedPreferences.edit()
-        val markersJson = Gson().toJson(markers)
-        editor.putString("marker_list", markersJson)
-        editor.apply()
+    fun removeMarker(marker: Marker) {
+        viewModelScope.launch {
+            val currentMarkers = _markers.value?.toMutableList() ?: mutableListOf()
+            if (currentMarkers.remove(marker)) {
+                val markerEntity = MarkerEntity(
+                    id = marker.id,
+                    description = marker.description,
+                    latitude = marker.point.latitude,
+                    longitude = marker.point.longitude
+                )
+                repository.saveMarker(currentMarkers.map { markerEntity })
+                _markers.value = currentMarkers
+            } else {
+                Log.d("RemoveMarker", "Маркер не найден для удаления")
+            }
+        }
     }
 
 }

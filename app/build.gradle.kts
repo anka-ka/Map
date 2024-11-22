@@ -5,6 +5,10 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id ("org.jetbrains.kotlin.kapt")
+    id("com.google.dagger.hilt.android")
+    id ("kotlin-kapt")
+
 }
 
 android {
@@ -83,6 +87,18 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx.v253)
     implementation(libs.androidx.navigation.fragment.ktx.v260)
     implementation (libs.play.services.location)
+
+    implementation("com.google.dagger:hilt-android:2.48")
+
+
+    implementation(libs.androidx.room.ktx)
+    kapt("com.google.dagger:hilt-compiler:2.48")
+    implementation("com.google.dagger:hilt-android:2.48")
+
+    implementation(libs.androidx.room.runtime.v225)
+    kapt(libs.androidx.room.compiler.v225)
+    implementation(libs.androidx.room.ktx.v225)
+
 
 
     implementation(libs.androidx.core.ktx)

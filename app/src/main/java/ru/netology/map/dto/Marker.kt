@@ -4,6 +4,7 @@ import com.yandex.mapkit.geometry.Point
 import java.io.Serializable
 
 data class Marker(
+    val id:Long = 0,
     val point: Point,
     val description: String): Serializable {
 

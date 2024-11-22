@@ -7,9 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.yandex.mapkit.MapKitFactory
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 import ru.netology.map.BuildConfig.MAPKIT_API_KEY
 
-
+@AndroidEntryPoint
 class AppActivity : AppCompatActivity(R.layout.app_activity) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
