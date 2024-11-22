@@ -13,12 +13,12 @@ plugins {
 
 android {
     namespace = "ru.netology.map"
-    compileSdk = 35
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "ru.netology.map"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -101,8 +101,6 @@ dependencies {
 
 
 
-    implementation(libs.androidx.core.ktx)
-    implementation (libs.androidx.core)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
