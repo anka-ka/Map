@@ -76,7 +76,7 @@ class MapRepository @Inject constructor(
             mapObjects.addPlacemark(point, ImageProvider.fromBitmap(it))
         }
     }
-
+    
     fun zoomIn(mapView: MapView) {
         val currentZoom = mapView.map.cameraPosition.zoom
         mapView.map.move(
@@ -127,6 +127,9 @@ class MapRepository @Inject constructor(
             }
             zoomValue = cameraPosition.zoom
         }
+    }
+    suspend fun deleteMarkerById(id: Long) {
+        markerDao.deleteById(id)
     }
 
     private fun createBitmapFromVector(context: Context, drawableId: Int): Bitmap? {

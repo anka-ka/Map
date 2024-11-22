@@ -75,6 +75,7 @@ class MapViewModel @Inject constructor(private val repository: MapRepository) : 
     }
 
 
+
     fun zoomIn(mapView: MapView) {
         repository.zoomIn(mapView)
     }
@@ -121,8 +122,10 @@ class MapViewModel @Inject constructor(private val repository: MapRepository) : 
                     latitude = marker.point.latitude,
                     longitude = marker.point.longitude
                 )
-                repository.saveMarker(currentMarkers.map { markerEntity })
+
+                repository.deleteMarkerById(marker.id)
                 _markers.value = currentMarkers
+                repository.saveMarker(currentMarkers.map { markerEntity })
             } else {
                 Log.d("RemoveMarker", "Маркер не найден для удаления")
             }
