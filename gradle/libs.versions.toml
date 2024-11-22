@@ -3,12 +3,15 @@ agp = "8.6.0"
 androidxNavigationFragmentKtx = "2.6.0"
 androidxRoomKtx = "2.2.5"
 fragmentKtx = "1.8.3"
+gradle = "8.2.2"
 gson = "2.11.0"
+hiltAndroidGradlePlugin = "2.48"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
+kotlinGradlePlugin = "1.5.31"
 lifecycleRuntimeKtx = "2.8.5"
 activityCompose = "1.9.2"
 composeBom = "2024.04.01"
@@ -44,7 +47,9 @@ androidx-room-ktx-v225 = { module = "androidx.room:room-ktx", version.ref = "and
 androidx-room-ktx-v270 = { module = "androidx.room:room-ktx", version.ref = "roomKtxVersion" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 androidx-room-runtime-v225 = { module = "androidx.room:room-runtime", version.ref = "roomRuntimeVersion" }
+gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+hilt-android-gradle-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hiltAndroidGradlePlugin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -62,6 +67,7 @@ androidx-fragment = { group = "androidx.fragment", name = "fragment", version.re
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
 androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigationFragment" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinGradlePlugin" }
 mapkit = { module = "com.yandex.android:mapkit", version.ref = "mapkit" }
 maps-mobile-v480full = { module = "com.yandex.android:maps.mobile", version.ref = "yandexMapsMobile" }
 maps-mobile-v480lite = { module = "com.yandex.android:maps.mobile", version.ref = "mapsMobile" }
