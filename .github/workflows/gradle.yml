@@ -22,7 +22,7 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew test jacocoTestReport
     - name: Upload Build Artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
           name: jacoco_reports
           path: build/reports/jacoco/test/html
