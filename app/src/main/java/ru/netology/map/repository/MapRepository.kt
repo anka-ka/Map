@@ -76,7 +76,7 @@ class MapRepository @Inject constructor(
             mapObjects.addPlacemark(point, ImageProvider.fromBitmap(it))
         }
     }
-    
+
     fun zoomIn(mapView: MapView) {
         val currentZoom = mapView.map.cameraPosition.zoom
         mapView.map.move(

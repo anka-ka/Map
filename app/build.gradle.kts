@@ -28,13 +28,8 @@ android {
             useSupportLibrary = true
         }
 
-        fun getMapkitApiKey(): String {
-            val properties = Properties()
-            file("maps.properties").inputStream().use { properties.load(it) }
-            return properties.getProperty("MAPKIT_API_KEY", "")
-        }
-
-        val mapkitApiKey: String = getMapkitApiKey()
+        val mapkitApiKey = System.getenv("MAPKIT_API_KEY")
+            ?: throw IllegalStateException("MAPKIT_API_KEY not found in environment variables")
 
         buildConfigField("String", "MAPKIT_API_KEY", "\"$mapkitApiKey\"")
 
