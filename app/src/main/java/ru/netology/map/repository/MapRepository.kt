@@ -1,13 +1,9 @@
 package ru.netology.map.repository
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.util.Log
 import androidx.core.content.ContextCompat
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition

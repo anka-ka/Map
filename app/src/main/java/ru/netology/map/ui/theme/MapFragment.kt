@@ -99,7 +99,11 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
         viewModel.markers.observe(viewLifecycleOwner) { markers ->
             mapView.map.mapObjects.clear()
             markers.forEach { marker ->
-                viewModel.addPlacemark(mapView, marker.point, R.drawable.baseline_location_pin_24_red)
+                viewModel.addPlacemark(
+                    mapView,
+                    marker.point,
+                    R.drawable.baseline_location_pin_24_red
+                )
             }
         }
     }
@@ -132,19 +136,24 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
             requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
             return
         }
-        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            val targetLocation = location?.let {
-                Point(it.latitude, it.longitude)
-            } ?: Point(59.9402, 30.315)
+        val marker = arguments?.getSerializable("marker") as? Marker
+        if (marker != null) {
+            viewModel.moveToMarker(marker, mapView)
+        } else {
+            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                val targetLocation = location?.let {
+                    Point(it.latitude, it.longitude)
+                } ?: Point(59.9402, 30.315)
 
-            moveMapToLocation(targetLocation)
-            viewModel.addPlacemark(
-                mapView,
-                targetLocation,
-                R.drawable.baseline_location_pin_24
-            )
-        }.addOnFailureListener {
-            showLocationErrorSnackbar()
+                moveMapToLocation(targetLocation)
+                viewModel.addPlacemark(
+                    mapView,
+                    targetLocation,
+                    R.drawable.baseline_location_pin_24
+                )
+            }.addOnFailureListener {
+                showLocationErrorSnackbar()
+            }
         }
     }
 
@@ -197,7 +206,12 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
         finished: Boolean
     ) {
         if (finished) {
-            viewModel.handleCameraPositionChanged(mapView, cameraPosition, cameraUpdateReason, finished)
+            viewModel.handleCameraPositionChanged(
+                mapView,
+                cameraPosition,
+                cameraUpdateReason,
+                finished
+            )
         }
     }
 
@@ -211,5 +225,10 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
         mapView.onStop()
         MapKitFactory.getInstance().onStop()
         super.onStop()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadMarkers()
     }
 }

@@ -1,23 +1,18 @@
 package ru.netology.map.ViewModel
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.map.CameraUpdateReason
-import com.yandex.mapkit.map.PlacemarkMapObject
 import com.yandex.mapkit.mapview.MapView
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.netology.map.dto.Marker
-import ru.netology.map.entity.MarkerEntity
 import ru.netology.map.repository.MapRepository
 import javax.inject.Inject
 
@@ -31,22 +26,6 @@ class MapViewModel @Inject constructor(private val repository: MapRepository) : 
         loadMarkers()
     }
 
-    private fun mapToMarker(markerEntity: MarkerEntity): Marker {
-        return Marker(
-            id = markerEntity.id,
-            description = markerEntity.description,
-            point = Point(markerEntity.latitude, markerEntity.longitude)
-        )
-    }
-    private fun mapToMarkerEntity(marker: Marker): MarkerEntity {
-        return MarkerEntity(
-            id = marker.id,
-            description = marker.description,
-            latitude = marker.point.latitude,
-            longitude = marker.point.longitude
-        )
-    }
-
     fun addMarker(marker: Marker) {
         viewModelScope.launch {
             repository.addMarker(marker)
@@ -55,7 +34,7 @@ class MapViewModel @Inject constructor(private val repository: MapRepository) : 
     }
 
 
-    private fun loadMarkers() {
+    fun loadMarkers() {
         viewModelScope.launch {
             val markers = repository.getMarkers()
             _markers.value = markers
@@ -96,40 +75,18 @@ class MapViewModel @Inject constructor(private val repository: MapRepository) : 
     }
 
 
-    fun updateMarkers(marker: Marker, markers: List<Marker>) {
-        viewModelScope.launch {
-            val markerEntities = markers.map {
-                MarkerEntity(
-                    id = it.id,
-                    description = it.description,
-                    latitude = marker.point.latitude,
-                    longitude = marker.point.longitude
-                )
-            }
-            repository.saveMarker(markerEntities)
-            _markers.value = markers
-        }
-    }
-
-
     fun removeMarker(marker: Marker) {
         viewModelScope.launch {
-            val currentMarkers = _markers.value?.toMutableList() ?: mutableListOf()
-            if (currentMarkers.remove(marker)) {
-                val markerEntity = MarkerEntity(
-                    id = marker.id,
-                    description = marker.description,
-                    latitude = marker.point.latitude,
-                    longitude = marker.point.longitude
-                )
+            repository.deleteMarkerById(marker.id)
+            _markers.value = _markers.value?.filter { it.id != marker.id } ?: emptyList()
 
-                repository.deleteMarkerById(marker.id)
-                _markers.value = currentMarkers
-                repository.saveMarker(currentMarkers.map { markerEntity })
-            } else {
-                Log.d("RemoveMarker", "Маркер не найден для удаления")
-            }
         }
     }
 
+    fun moveToMarker(marker: Marker, mapView: MapView) {
+        val point = marker.point
+        Log.d("MapViewModel", "Moving to marker at: ${point.latitude}, ${point.longitude}")
+        val cameraPosition = CameraPosition(point, 17.0f, 0.0f, 0.0f)
+        mapView.map.move(cameraPosition, Animation(Animation.Type.SMOOTH, 5f), null)
+    }
 }
