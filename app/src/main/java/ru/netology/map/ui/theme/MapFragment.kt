@@ -2,11 +2,8 @@ package ru.netology.map.ui.theme
 
 import android.Manifest
 import android.app.AlertDialog
-import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,45 +13,28 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.material.snackbar.Snackbar
-import com.yandex.mapkit.layers.GeoObjectTapEvent
-import com.yandex.mapkit.layers.GeoObjectTapListener
 import com.yandex.mapkit.map.CameraListener
 import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.map.CameraUpdateReason
-import com.yandex.mapkit.map.GeoObjectSelectionMetadata
 import com.yandex.mapkit.map.InputListener
-import android.provider.Settings
 import androidx.fragment.app.viewModels
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
 import com.yandex.mapkit.map.Map
 import com.yandex.mapkit.mapview.MapView
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.map.R
 import ru.netology.map.ViewModel.MapViewModel
-import ru.netology.map.ViewModel.MapViewModelFactory
 import ru.netology.map.databinding.FragmentMapBinding
 import ru.netology.map.dto.Marker
-import ru.netology.map.repository.MapRepository
 
 @AndroidEntryPoint
 class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
 
-    companion object {
-        private const val PERMISSION_REQUEST_CODE = 1001
-    }
 
     private lateinit var mapView: MapView
     private val viewModel: MapViewModel by viewModels()
@@ -79,7 +59,6 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
         setupPermissionLauncher()
         setupMap()
         setupObservers()
-
         binding.zoomInButton.setOnClickListener { viewModel.zoomIn(mapView) }
         binding.zoomOutButton.setOnClickListener { viewModel.zoomOut(mapView) }
         binding.marksMenu.setOnClickListener {
@@ -103,6 +82,7 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
     private fun setupMap() {
         mapView = binding.mapView
         mapView.map.addCameraListener(this)
+
 
         mapView.map.addInputListener(object : InputListener {
             override fun onMapTap(map: Map, point: Point) {
@@ -134,13 +114,24 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
         } else {
             requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         }
+
     }
 
     private fun getCurrentLocation() {
-
         val fusedLocationClient =
             LocationServices.getFusedLocationProviderClient(requireContext())
 
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            return
+        }
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
             val targetLocation = location?.let {
                 Point(it.latitude, it.longitude)
