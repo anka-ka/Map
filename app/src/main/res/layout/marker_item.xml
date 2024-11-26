@@ -1,27 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="8dp"
+    android:background="?attr/colorPrimary"
     android:orientation="horizontal"
-    android:padding="16dp">
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp">
 
-    <TextView
-        android:id="@+id/marker_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textSize="20sp"
-        android:textColor="@color/black"
-        android:paddingTop="10dp"
-        android:text="@string/marker_description" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/colorPrimary"
+        android:orientation="horizontal"
+        android:padding="10dp">
 
-    <ImageButton
-        android:id="@+id/menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/menu"
-        app:srcCompat="@drawable/baseline_more_vert_24"
-      />
+        <TextView
+            android:id="@+id/marker_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="10dp"
+            android:text="@string/marker_description"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
 
-</LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/menu"
+            style="?attr/floatingActionButtonSmallStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            app:backgroundTint="?attr/colorPrimary"
+            app:tint="?attr/colorOnPrimary"
+            app:elevation="8dp"
+            app:pressedTranslationZ="8dp"
+            android:contentDescription="@string/menu"
+            app:srcCompat="@drawable/baseline_more_vert_24" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

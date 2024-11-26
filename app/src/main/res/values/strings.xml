@@ -9,4 +9,5 @@
     <string name="Edit">Редактировать</string>
     <string name="Remove">Удалить</string>
     <string name="Save">Сохранить</string>
+    <string name="back">Back</string>
 </resources>

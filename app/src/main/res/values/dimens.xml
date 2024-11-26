@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="icon_button_padding">12dp</dimen>
+    <dimen name="icon_button_size">48dp</dimen>
+    <dimen name="common_spacing">16dp</dimen>
+</resources>

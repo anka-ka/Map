@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E0FFFF"
+    android:background="?attr/colorPrimary"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,27 +13,30 @@
         android:layout_height="match_parent"
         android:id="@+id/marks_menu_fragment">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/refresh"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+        <Button
+            android:id="@+id/back"
+            style="?attr/floatingActionButtonSmallStyle"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:contentDescription="@string/back"
+            android:backgroundTint="?attr/colorPrimary"
+            app:icon="@drawable/baseline_arrow_back_24"
+            app:iconTint="?attr/colorOnPrimary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/list"/>
 
                 <TextView
                     android:id="@+id/list"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="80dp"
                     android:text="@string/list"
-                    android:textSize="20sp"
+                    android:textSize="30sp"
                     android:textColor="@color/black"
-                    android:paddingTop="40dp"
-                    android:paddingBottom="40dp"
+                    android:gravity="center"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toBottomOf="@id/back"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/markers_recycler_view"
@@ -46,8 +49,5 @@
                     tools:listitem="@layout/marker_item"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

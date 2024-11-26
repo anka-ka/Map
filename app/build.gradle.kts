@@ -82,20 +82,18 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx.v253)
     implementation(libs.androidx.navigation.fragment.ktx.v260)
     implementation (libs.play.services.location)
+    implementation(libs.androidx.material3)
+    implementation(libs.material)
 
     implementation("com.google.dagger:hilt-android:2.48")
-
-
     implementation(libs.androidx.room.ktx)
+    implementation(libs.cronet.embedded)
     kapt("com.google.dagger:hilt-compiler:2.48")
     implementation("com.google.dagger:hilt-android:2.48")
 
     implementation(libs.androidx.room.runtime.v225)
     kapt(libs.androidx.room.compiler.v225)
     implementation(libs.androidx.room.ktx.v225)
-
-
-
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))

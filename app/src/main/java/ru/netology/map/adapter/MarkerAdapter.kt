@@ -67,4 +67,17 @@ class MarkerAdapter(
 
     override fun getItemCount(): Int = markers.size
 
+    fun updateData(newMarkers: List<Marker>) {
+        markers.clear()
+        markers.addAll(newMarkers)
+        notifyDataSetChanged()
+    }
+    fun onItemMove(fromPosition: Int, toPosition: Int) {
+        if (fromPosition != toPosition) {
+            val movedItem = markers.removeAt(fromPosition)
+            markers.add(toPosition, movedItem)
+            notifyItemMoved(fromPosition, toPosition)
+        }
+    }
+
 }
