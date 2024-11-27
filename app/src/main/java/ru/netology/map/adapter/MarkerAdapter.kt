@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.map.R
 import ru.netology.map.dto.Marker
@@ -68,10 +69,13 @@ class MarkerAdapter(
     override fun getItemCount(): Int = markers.size
 
     fun updateData(newMarkers: List<Marker>) {
+        val diffCallback = MarkerDiffCallback(markers, newMarkers)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
         markers.clear()
         markers.addAll(newMarkers)
-        notifyDataSetChanged()
+        diffResult.dispatchUpdatesTo(this)
     }
+
     fun onItemMove(fromPosition: Int, toPosition: Int) {
         if (fromPosition != toPosition) {
             val movedItem = markers.removeAt(fromPosition)

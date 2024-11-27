@@ -3,9 +3,13 @@ package ru.netology.map.adapter
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import ru.netology.map.ViewModel.MapViewModel
 
 
-class ViewDragHelperCallback(private val adapter: MarkerAdapter) : ItemTouchHelper.Callback() {
+class ViewDragHelperCallback(
+    private val adapter: MarkerAdapter,
+    private val viewModel: MapViewModel
+) : ItemTouchHelper.Callback() {
 
     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
         val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
@@ -18,8 +22,8 @@ class ViewDragHelperCallback(private val adapter: MarkerAdapter) : ItemTouchHelp
         source: RecyclerView.ViewHolder,
         target: RecyclerView.ViewHolder
     ): Boolean {
-
         adapter.onItemMove(source.adapterPosition, target.adapterPosition)
+        viewModel.updateMarkerOrder(source.adapterPosition, target.adapterPosition)
         return true
     }
 

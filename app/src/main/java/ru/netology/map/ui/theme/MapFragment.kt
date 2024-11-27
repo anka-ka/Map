@@ -4,9 +4,11 @@ import android.Manifest
 import android.app.AlertDialog
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -24,9 +26,11 @@ import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.map.CameraUpdateReason
 import com.yandex.mapkit.map.InputListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.yandex.mapkit.map.Map
 import com.yandex.mapkit.mapview.MapView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import ru.netology.map.R
 import ru.netology.map.ViewModel.MapViewModel
 import ru.netology.map.databinding.FragmentMapBinding
@@ -90,7 +94,7 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
             }
 
             override fun onMapLongTap(map: Map, point: Point) {
-                //
+                showMarkerInputDialog(point)
             }
         })
     }
@@ -186,17 +190,28 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
     }
 
     private fun showMarkerInputDialog(point: Point) {
-        val inputField = EditText(requireContext())
-        AlertDialog.Builder(requireContext())
-            .setTitle("Введите название маркера")
-            .setView(inputField)
-            .setPositiveButton("Добавить") { _, _ ->
+        val dialogView = layoutInflater.inflate(R.layout.dialog_marker_input, null)
+
+        val inputField = dialogView.findViewById<EditText>(R.id.inputField)
+        val addButton = dialogView.findViewById<Button>(R.id.addButton)
+        val cancelButton = dialogView.findViewById<Button>(R.id.cancelButton)
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .create()
+        addButton.setOnClickListener {
+            lifecycleScope.launch {
+                val order = viewModel.getNextOrder()
                 val description = inputField.text.toString()
-                val newMarker = Marker(point = point, description = description)
+                val newMarker = Marker(point = point, description = description, order = order)
                 viewModel.addMarker(newMarker)
             }
-            .setNegativeButton("Отмена", null)
-            .show()
+            dialog.dismiss()
+        }
+        cancelButton.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     override fun onCameraPositionChanged(
@@ -217,18 +232,33 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
 
     override fun onStart() {
         super.onStart()
-        mapView.onStart()
-        MapKitFactory.getInstance().onStart()
+        Log.d("MapFragment", "onStart called")
+
+        if (::mapView.isInitialized) {
+            mapView.onStart()
+            MapKitFactory.getInstance().onStart()
+            setupMap()
+        } else {
+            Log.d("MapFragment", "mapView is not initialized")
+        }
     }
 
     override fun onStop() {
-        mapView.onStop()
-        MapKitFactory.getInstance().onStop()
         super.onStop()
+        Log.d("MapFragment", "onStop called")
+        if (::mapView.isInitialized) {
+            mapView.onStop()
+            MapKitFactory.getInstance().onStop()
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.loadMarkers()
+        Log.d("MapFragment", "onResume called")
+        if (::mapView.isInitialized) {
+            mapView.onStart()
+            MapKitFactory.getInstance().onStart()
+            setupMap()
+        }
     }
 }

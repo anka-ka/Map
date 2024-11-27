@@ -11,6 +11,7 @@ import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.map.CameraUpdateReason
 import com.yandex.mapkit.mapview.MapView
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ru.netology.map.dto.Marker
 import ru.netology.map.repository.MapRepository
@@ -26,26 +27,62 @@ class MapViewModel @Inject constructor(private val repository: MapRepository) : 
         loadMarkers()
     }
 
+
     fun addMarker(marker: Marker) {
         viewModelScope.launch {
             repository.addMarker(marker)
-            _markers.value = repository.getMarkers()
+            loadMarkers()
         }
     }
 
 
     fun loadMarkers() {
         viewModelScope.launch {
-            val markers = repository.getMarkers()
-            _markers.value = markers
+            repository.getMarkers().collect { markers ->
+                _markers.value = markers
+            }
         }
     }
 
 
-    suspend fun updateMarkerDescription(marker: Marker, newDescription: String) {
-        val updatedMarker = marker.copy(description = newDescription)
-        repository.updateMarker(updatedMarker)
-        loadMarkers()
+    fun updateMarkerOrder(fromPosition: Int, toPosition: Int) {
+        val currentMarkers = _markers.value?.toMutableList() ?: return
+        val movedMarker = currentMarkers.removeAt(fromPosition)
+        currentMarkers.add(toPosition, movedMarker)
+
+        currentMarkers.forEachIndexed { index, marker -> marker.order = index }
+
+        viewModelScope.launch {
+            repository.updateMarkersOrder(currentMarkers)
+        }
+
+        _markers.value = currentMarkers
+    }
+
+    fun getNextOrder(): Int {
+        val markers = markers.value.orEmpty()
+        Log.d("MarkerDialog", "Markers: $markers")
+        return if (markers.isNotEmpty()) {
+            val maxOrder = markers.maxOf { it.order }
+            Log.d("MarkerDialog", "Max Order: $maxOrder")
+            maxOrder + 1
+        } else {
+            1
+        }
+    }
+
+
+    fun updateMarkerDescription(marker: Marker, newDescription: String) {
+        val currentMarkers = _markers.value?.toMutableList() ?: return
+        val index = currentMarkers.indexOf(marker)
+        if (index != -1) {
+            currentMarkers[index].description = newDescription
+            _markers.value = currentMarkers
+
+            viewModelScope.launch {
+                repository.updateMarkersOrder(currentMarkers)
+            }
+        }
     }
 
 

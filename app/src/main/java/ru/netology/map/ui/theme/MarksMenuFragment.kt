@@ -34,16 +34,15 @@ class MarksMenuFragment : Fragment(R.layout.marks_menu) {
         val recyclerView: RecyclerView = view.findViewById(R.id.markers_recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel.markers.observe(viewLifecycleOwner) { markers ->
-            adapter = MarkerAdapter(
-                markers.toMutableList(),
-                onEdit = { marker -> showEditDialog(marker) },
-                onRemove = { marker -> viewModel.removeMarker(marker) },
-                onClick = { marker -> onMarkerClick(marker) }
-            )
-            recyclerView.adapter = adapter
+        adapter = MarkerAdapter(
+            mutableListOf(),
+            onEdit = { marker -> showEditDialog(marker) },
+            onRemove = { marker -> viewModel.removeMarker(marker) },
+            onClick = { marker -> onMarkerClick(marker) }
+        )
+        recyclerView.adapter = adapter
 
-            val viewDragHelperCallback = ViewDragHelperCallback(adapter)
+            val viewDragHelperCallback = ViewDragHelperCallback(adapter, viewModel)
             val itemTouchHelper = ItemTouchHelper(viewDragHelperCallback)
             itemTouchHelper.attachToRecyclerView(recyclerView)
 
@@ -51,7 +50,7 @@ class MarksMenuFragment : Fragment(R.layout.marks_menu) {
             viewModel.markers.observe(viewLifecycleOwner) { markers ->
                 adapter.updateData(markers)
             }
-        }
+
         view.findViewById<MaterialButton>(R.id.back).setOnClickListener {
             findNavController().navigate(R.id.action_MarksMenuFragment_to_mapFragment)
         }

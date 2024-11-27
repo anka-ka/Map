@@ -11,6 +11,8 @@ import com.yandex.mapkit.map.CameraUpdateReason
 import com.yandex.mapkit.map.PlacemarkMapObject
 import com.yandex.mapkit.mapview.MapView
 import com.yandex.runtime.image.ImageProvider
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import ru.netology.map.R
 import ru.netology.map.dao.MarkerDao
 import ru.netology.map.dto.Marker
@@ -30,20 +32,27 @@ class MapRepository @Inject constructor(
             id = marker.id,
             description = marker.description,
             latitude = marker.point.latitude,
-            longitude = marker.point.longitude
+            longitude = marker.point.longitude,
+            order = marker.order
         )
         markerDao.insert(markerEntity)
     }
 
-    suspend fun getMarkers(): List<Marker> {
-        return markerDao.getAllMarkers().map { markerEntity ->
-            Marker(
-                id = markerEntity.id,
-                description = markerEntity.description,
-                point = Point(markerEntity.latitude, markerEntity.longitude)
-            )
+    fun getMarkers(): Flow<List<Marker>> {
+        return markerDao.getAllMarkers().map { entities ->
+            entities.map { it.toDomain() }
         }
     }
+
+//    suspend fun getMarkers(): List<Marker> {
+//        return markerDao.getAllMarkers().map { markerEntity ->
+//            Marker(
+//                id = markerEntity.id,
+//                description = markerEntity.description,
+//                point = Point(markerEntity.latitude, markerEntity.longitude)
+//            )
+//        }
+//    }
 
     suspend fun saveMarker(markers: List<MarkerEntity>) {
         markers.forEach { marker ->
@@ -56,9 +65,16 @@ class MapRepository @Inject constructor(
             id = marker.id,
             description = marker.description,
             latitude = marker.point.latitude,
-            longitude = marker.point.longitude
+            longitude = marker.point.longitude,
+            order = marker.order
         )
         markerDao.update(markerEntity)
+    }
+
+    suspend fun updateMarkersOrder(newOrderList: List<Marker>) {
+        newOrderList.forEachIndexed { index, marker ->
+            markerDao.updateOrder(marker.id, index)
+        }
     }
 
     fun addPlacemarkAtLocation(
@@ -139,5 +155,23 @@ class MapRepository @Inject constructor(
         drawable.setBounds(0, 0, canvas.width, canvas.height)
         drawable.draw(canvas)
         return bitmap
+    }
+    fun Marker.toEntity(): MarkerEntity {
+        return MarkerEntity(
+            id = this.id,
+            latitude = this.point.latitude,
+            longitude = this.point.longitude,
+            description = this.description,
+            order = this.order
+        )
+    }
+
+    fun MarkerEntity.toDomain(): Marker {
+        return Marker(
+            id = this.id,
+            point = Point(this.latitude, this.longitude),
+            order = this.order,
+            description = this.description
+        )
     }
 }
