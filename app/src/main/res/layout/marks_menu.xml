@@ -13,15 +13,14 @@
         android:layout_height="match_parent"
         android:id="@+id/marks_menu_fragment">
 
-        <Button
+        <ImageButton
             android:id="@+id/back"
-            style="?attr/floatingActionButtonSmallStyle"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:contentDescription="@string/back"
             android:backgroundTint="?attr/colorPrimary"
-            app:icon="@drawable/baseline_arrow_back_24"
-            app:iconTint="?attr/colorOnPrimary"
+            app:srcCompat="@drawable/baseline_arrow_back_24"
+            app:tint="?attr/colorOnPrimary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/list"/>

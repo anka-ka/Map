@@ -237,9 +237,6 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
         if (::mapView.isInitialized) {
             mapView.onStart()
             MapKitFactory.getInstance().onStart()
-            setupMap()
-        } else {
-            Log.d("MapFragment", "mapView is not initialized")
         }
     }
 
@@ -255,10 +252,10 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
     override fun onResume() {
         super.onResume()
         Log.d("MapFragment", "onResume called")
+
         if (::mapView.isInitialized) {
             mapView.onStart()
             MapKitFactory.getInstance().onStart()
-            setupMap()
         }
     }
 }

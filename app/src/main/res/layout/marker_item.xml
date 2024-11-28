@@ -16,27 +16,33 @@
         android:orientation="horizontal"
         android:padding="10dp">
 
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="fill_parent"
+            app:srcCompat="@drawable/baseline_menu_24"
+            android:alpha="0.2"
+            />
+
+
         <TextView
             android:id="@+id/marker_description"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:paddingTop="10dp"
+            android:paddingTop="8dp"
+            android:paddingStart="10dp"
             android:text="@string/marker_description"
             android:textColor="@color/black"
             android:textSize="20sp" />
 
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <ImageButton
             android:id="@+id/menu"
-            style="?attr/floatingActionButtonSmallStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             app:backgroundTint="?attr/colorPrimary"
             app:tint="?attr/colorOnPrimary"
-            app:elevation="8dp"
-            app:pressedTranslationZ="8dp"
             android:contentDescription="@string/menu"
             app:srcCompat="@drawable/baseline_more_vert_24" />
 

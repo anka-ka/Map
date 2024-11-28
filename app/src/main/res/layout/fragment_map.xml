@@ -14,33 +14,47 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <ImageButton
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/toggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+
+    <Button
         android:id="@+id/zoom_in_button"
-        android:layout_width="48dp"
+        style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+        android:layout_width="52dp"
         android:layout_height="48dp"
         android:contentDescription="zoom in"
         app:iconTint="@color/black"
-        app:srcCompat="@drawable/baseline_add_24"
+        android:backgroundTint="?attr/colorPrimary"
+        app:icon="@drawable/baseline_add_24"
         android:layout_marginBottom="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <ImageButton
+    <Button
         android:id="@+id/zoom_out_button"
-        android:layout_width="48dp"
+        style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+        android:layout_width="52dp"
         android:layout_height="48dp"
         android:contentDescription="zoom out"
+        android:backgroundTint="?attr/colorPrimary"
         app:iconTint="@color/black"
-        app:srcCompat="@drawable/baseline_horizontal_rule_24"
+        app:icon="@drawable/baseline_horizontal_rule_24"
         android:layout_marginBottom="16dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/zoom_in_button"/>
+    </com.google.android.material.button.MaterialButtonToggleGroup>
 
     <ImageButton
         android:id="@+id/marks_menu"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:contentDescription="menu"
+        android:backgroundTint="?attr/colorPrimary"
         app:iconTint="@color/black"
         app:srcCompat="@drawable/baseline_menu_book_24"
         android:layout_marginBottom="16dp"

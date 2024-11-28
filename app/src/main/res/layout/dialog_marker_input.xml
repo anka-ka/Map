@@ -2,14 +2,22 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="?attr/colorPrimary">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Введите название отметки"
+        android:textSize="18sp"
+        android:textColor="?attr/colorOnPrimary"/>
 
 
     <EditText
         android:id="@+id/inputField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Введите название маркера"
+        android:hint="Название вашей отметки"
         android:inputType="text" />
 
 
@@ -20,19 +28,22 @@
         android:gravity="end"
         android:paddingTop="16dp">
 
-
-        <Button
-            android:id="@+id/addButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Добавить" />
-
-
         <Button
             android:id="@+id/cancelButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Отмена"
+            />
+
+
+        <Button
+            android:id="@+id/addButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Добавить"
             android:layout_marginStart="16dp" />
+
+
+
     </LinearLayout>
 </LinearLayout>
