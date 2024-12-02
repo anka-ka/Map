@@ -1,27 +1,36 @@
 package ru.netology.map
 
 
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.yandex.mapkit.MapKitFactory
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
-import ru.netology.map.BuildConfig.MAPKIT_API_KEY
+import androidx.appcompat.app.AppCompatDelegate
+import ru.netology.map.repository.SettingsRepository
+import javax.inject.Inject
+import java.util.Locale
+import android.content.res.Configuration
 
 @AndroidEntryPoint
 class AppActivity : AppCompatActivity(R.layout.app_activity) {
 
+    @Inject
+    lateinit var settingsRepository: SettingsRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        MapKitFactory.setApiKey(MAPKIT_API_KEY)
-        MapKitFactory.initialize(this)
-        requestLocationPermission()
+        val (language, theme) = settingsRepository.getAllSettings()
 
-   }
+        setAppLocale(this, language)
+        setAppTheme(theme)
+
+        requestLocationPermission()
+    }
+
 
     private fun requestLocationPermission() {
         val PERMISSIONS_REQUEST_FINE_LOCATION = 1
@@ -37,6 +46,21 @@ class AppActivity : AppCompatActivity(R.layout.app_activity) {
                 PERMISSIONS_REQUEST_FINE_LOCATION
             )
         }
+    }
+    private fun setAppTheme(theme: String) {
+        when (theme) {
+            "dark" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            "light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+    }
+    private fun setAppLocale(context: Context, language: String) {
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+
+        val config = Configuration(context.resources.configuration)
+        config.setLocale(locale)
+
+        context.resources.updateConfiguration(config, context.resources.displayMetrics)
     }
 }
 

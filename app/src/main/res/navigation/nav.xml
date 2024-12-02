@@ -35,6 +35,15 @@
         android:id="@+id/action_MarksMenuFragment_to_mapFragment"
         app:destination="@id/mapFragment"/>
 
+    <fragment
+        android:id="@+id/settings"
+        android:name="ru.netology.map.ui.theme.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/settings"/>
+    <action
+        android:id="@+id/action_mapFragment_to_SettingsFragment"
+        app:destination="@+id/settings"/>
+
 
 
 

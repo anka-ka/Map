@@ -68,6 +68,9 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
         binding.marksMenu.setOnClickListener {
             findNavController().navigate(R.id.action_mapFragment_to_MarksMenuFragment)
         }
+        binding.settings.setOnClickListener{
+            findNavController().navigate(R.id.action_mapFragment_to_SettingsFragment)
+        }
 
         checkPermissionsAndGetLocation()
     }

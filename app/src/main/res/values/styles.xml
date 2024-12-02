@@ -25,4 +25,10 @@
         <item name="strokeWidth">2dp</item>
 
     </style>
+
+
+
+    <style name="Widget.App.RadioButton" parent="Widget.Material3.CompoundButton.RadioButton">
+        <item name="buttonTint">@color/grey</item>
+            </style>
 </resources>

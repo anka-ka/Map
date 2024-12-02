@@ -35,6 +35,7 @@ swiperefreshlayout = "1.1.0"
 roomCommon = "2.6.1"
 roomKtx = "2.6.1"
 cronetEmbedded = "119.6045.31"
+datastoreCoreAndroid = "1.1.1"
 
 [libraries]
 android-maps-mobile = { module = "com.yandex.android:maps.mobile", version.ref = "mapsMobileVersion" }
@@ -80,6 +81,7 @@ play-services-location = { module = "com.google.android.gms:play-services-locati
 androidx-room-common = { group = "androidx.room", name = "room-common", version.ref = "roomCommon" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 cronet-embedded = { group = "org.chromium.net", name = "cronet-embedded", version.ref = "cronetEmbedded" }
+androidx-datastore-core-android = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastoreCoreAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

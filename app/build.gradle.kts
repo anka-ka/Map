@@ -88,6 +88,7 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.48")
     implementation(libs.androidx.room.ktx)
     implementation(libs.cronet.embedded)
+    implementation(libs.androidx.datastore.core.android)
     kapt("com.google.dagger:hilt-compiler:2.48")
     implementation("com.google.dagger:hilt-android:2.48")
 

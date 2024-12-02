@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Map</string>
+    <string name="welcome_to">Добро пожаловать в</string>
+    <string name="map">MAP</string>
+    <string name="go">Вперед</string>
+    <string name="list">Список мест для моего путешествия</string>
+    <string name="marker_description">Описание отметки</string>
+    <string name="menu">Меню</string>
+    <string name="Edit">Редактировать</string>
+    <string name="Remove">Удалить</string>
+    <string name="Save">Сохранить</string>
+    <string name="back">Назад</string>
+    <string name="set_up_as_you_like">Настрой на свой вкус</string>
+    <string name="languages">Языки</string>
+    <string name="english">Английский</string>
+    <string name="russian">Русский</string>
+    <string name="themes">Темы</string>
+    <string name="dark_theme">Темная тема</string>
+    <string name="light_theme">Светлая тема</string>
+    <string name="save">Сохранить</string>
+</resources>
