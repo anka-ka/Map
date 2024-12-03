@@ -20,8 +20,8 @@
             android:layout_width="20dp"
             android:layout_height="fill_parent"
             app:srcCompat="@drawable/baseline_menu_24"
-            android:alpha="0.2"
-            />
+            app:tint="?attr/colorOnPrimary"
+             />
 
 
         <TextView
@@ -32,7 +32,7 @@
             android:paddingTop="8dp"
             android:paddingStart="10dp"
             android:text="@string/marker_description"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorOnPrimary"
             android:textSize="20sp" />
 
 

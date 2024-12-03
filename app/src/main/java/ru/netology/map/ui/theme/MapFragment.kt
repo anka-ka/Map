@@ -42,6 +42,7 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
 
     private lateinit var mapView: MapView
     private val viewModel: MapViewModel by viewModels()
+    private lateinit var mapTapListener: InputListener
 
     private var _binding: FragmentMapBinding? = null
     private val binding get() = _binding!!
@@ -91,7 +92,7 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
         mapView.map.addCameraListener(this)
 
 
-        mapView.map.addInputListener(object : InputListener {
+        mapTapListener = object : InputListener {
             override fun onMapTap(map: Map, point: Point) {
                 showMarkerInputDialog(point)
             }
@@ -99,7 +100,9 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
             override fun onMapLongTap(map: Map, point: Point) {
                 showMarkerInputDialog(point)
             }
-        })
+        }
+
+        mapView.map.addInputListener(mapTapListener)
     }
 
     private fun setupObservers() {
@@ -175,10 +178,10 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
     private fun showPermissionDeniedSnackbar() {
         Snackbar.make(
             binding.root,
-            "Разрешение на доступ к местоположению отклонено",
+            R.string.permission_denied,
             Snackbar.LENGTH_LONG
         )
-            .setAction("Попробовать снова") {
+            .setAction(R.string.try_again) {
                 requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
             }
             .show()
@@ -187,7 +190,7 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
     private fun showLocationErrorSnackbar() {
         Snackbar.make(
             binding.root,
-            "Не удалось получить местоположение. Включите службы геолокации.",
+            R.string.failed_to_get_location,
             Snackbar.LENGTH_LONG
         ).show()
     }
@@ -235,8 +238,6 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
 
     override fun onStart() {
         super.onStart()
-        Log.d("MapFragment", "onStart called")
-
         if (::mapView.isInitialized) {
             mapView.onStart()
             MapKitFactory.getInstance().onStart()
@@ -245,8 +246,8 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
 
     override fun onStop() {
         super.onStop()
-        Log.d("MapFragment", "onStop called")
         if (::mapView.isInitialized) {
+            mapView.map.removeInputListener(mapTapListener)
             mapView.onStop()
             MapKitFactory.getInstance().onStop()
         }
@@ -254,8 +255,6 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
 
     override fun onResume() {
         super.onResume()
-        Log.d("MapFragment", "onResume called")
-
         if (::mapView.isInitialized) {
             mapView.onStart()
             MapKitFactory.getInstance().onStart()

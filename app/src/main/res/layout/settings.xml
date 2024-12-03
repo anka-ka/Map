@@ -3,21 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/settingsFragment"
-    android:background="?attr/colorPrimary"
+    android:background="?attr/colorSecondary"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="550dp"
         android:layout_gravity="bottom"
-        android:background="?attr/colorPrimary"
+        android:background="?attr/colorSecondary"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:contentDescription="@string/back"
-            android:backgroundTint="?attr/colorPrimary"
+            android:background="?android:selectableItemBackground"
             app:srcCompat="@drawable/baseline_arrow_back_24"
             app:tint="?attr/colorOnPrimary"
             android:id="@+id/backMenu"

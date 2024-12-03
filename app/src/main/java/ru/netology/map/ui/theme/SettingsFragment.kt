@@ -8,10 +8,11 @@ import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.map.R
 import ru.netology.map.ViewModel.SettingsViewModel
 
-
+@AndroidEntryPoint
 class SettingsFragment : Fragment(R.layout.settings) {
 
     private val viewModel: SettingsViewModel by viewModels()
@@ -27,6 +28,8 @@ class SettingsFragment : Fragment(R.layout.settings) {
         saveButton = view.findViewById(R.id.save_settings)
         languageGroup = view.findViewById(R.id.radio_group_languages)
         themeGroup = view.findViewById(R.id.radio_group_themes)
+
+
 
 
         viewModel.language.observe(viewLifecycleOwner) { language ->
@@ -61,6 +64,8 @@ class SettingsFragment : Fragment(R.layout.settings) {
             }
 
             viewModel.saveSettings(selectedLanguage, selectedTheme)
+
+            requireActivity().recreate()
         }
     }
 }

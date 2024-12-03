@@ -3,12 +3,12 @@
     android:padding="16dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/colorPrimary">
+    android:background="?attr/colorSecondary">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Введите название отметки"
+        android:text="@string/enter_the_name"
         android:textSize="18sp"
         android:textColor="?attr/colorOnPrimary"/>
 
@@ -17,7 +17,7 @@
         android:id="@+id/inputField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Название вашей отметки"
+        android:hint="@string/name_of_your_mark"
         android:inputType="text" />
 
 
@@ -32,7 +32,7 @@
             android:id="@+id/cancelButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Отмена"
+            android:text="@string/cancel"
             />
 
 
@@ -40,7 +40,7 @@
             android:id="@+id/addButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Добавить"
+            android:text="@string/add"
             android:layout_marginStart="16dp" />
 
 

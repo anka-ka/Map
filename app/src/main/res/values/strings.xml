@@ -18,4 +18,11 @@
     <string name="dark_theme">Dark theme</string>
     <string name="light_theme">Light theme</string>
     <string name="save">Save</string>
+    <string name="enter_the_name">Enter the name of your mark</string>
+    <string name="name_of_your_mark">Name of your mark</string>
+    <string name="cancel">Cancel</string>
+    <string name="add">Add</string>
+    <string name="permission_denied">Permission to access location denied</string>
+    <string name="try_again">Try again</string>
+    <string name="failed_to_get_location">Failed to get location. Turn on location services.</string>
 </resources>

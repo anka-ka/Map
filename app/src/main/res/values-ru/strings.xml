@@ -18,4 +18,11 @@
     <string name="dark_theme">Темная тема</string>
     <string name="light_theme">Светлая тема</string>
     <string name="save">Сохранить</string>
+    <string name="enter_the_name">Введите название отметки</string>
+    <string name="name_of_your_mark">Название вашей отметки</string>
+    <string name="cancel">Отмена</string>
+    <string name="add">Добавить</string>
+    <string name="permission_denied">Разрешение на доступ к местоположению отклонено</string>
+    <string name="try_again">Попробовать снова</string>
+    <string name="failed_to_get_location">Не удалось получить местоположение. Включите службы геолокации.</string>
 </resources>
