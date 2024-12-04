@@ -30,8 +30,11 @@
         android:id="@+id/toggleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="10sp"
         >
 
     <Button
@@ -61,15 +64,16 @@
         app:layout_constraintStart_toEndOf="@+id/zoom_in_button"/>
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
-    <ImageButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/marks_menu"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:contentDescription="menu"
-        android:background="?android:selectableItemBackground"
         app:iconTint="?attr/colorOnPrimary"
+        android:backgroundTint="?attr/colorPrimary"
         app:srcCompat="@drawable/baseline_menu_book_24"
         android:layout_marginBottom="16dp"
+        android:layout_marginStart="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 

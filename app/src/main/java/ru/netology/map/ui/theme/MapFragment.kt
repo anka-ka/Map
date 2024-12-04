@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -35,6 +36,7 @@ import ru.netology.map.R
 import ru.netology.map.ViewModel.MapViewModel
 import ru.netology.map.databinding.FragmentMapBinding
 import ru.netology.map.dto.Marker
+import kotlin.math.abs
 
 @AndroidEntryPoint
 class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
@@ -98,11 +100,26 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
             }
 
             override fun onMapLongTap(map: Map, point: Point) {
-                showMarkerInputDialog(point)
+                Log.d("Long tap", "long tap at point: $point")
+                val marker = getMarkerAtPoint(point)
+                if (marker != null) {
+                    showMarkerDescription(marker)
+                } else {
+                    Log.d("Long tap", "No marker found at this location.")
+                }
             }
         }
 
         mapView.map.addInputListener(mapTapListener)
+    }
+
+    private fun getMarkerAtPoint(point: Point): Marker? {
+        val tolerance = 0.0001
+
+        return viewModel.markers.value?.find {
+            abs(it.point.latitude - point.latitude) < tolerance &&
+                    abs(it.point.longitude - point.longitude) < tolerance
+        }
     }
 
     private fun setupObservers() {
@@ -116,6 +133,25 @@ class MapFragment : Fragment(R.layout.fragment_map), CameraListener {
                 )
             }
         }
+    }
+
+    private fun showMarkerDescription(marker: Marker) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_marker_description, null)
+
+        val descriptionTextView: TextView = dialogView.findViewById(R.id.dialog_description)
+        descriptionTextView.text = marker.description
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .setCancelable(true)
+            .create()
+
+        val closeButton: Button = dialogView.findViewById(R.id.close_button)
+        closeButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     private fun checkPermissionsAndGetLocation() {

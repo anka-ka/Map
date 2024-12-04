@@ -25,4 +25,7 @@
     <string name="permission_denied">Permission to access location denied</string>
     <string name="try_again">Try again</string>
     <string name="failed_to_get_location">Failed to get location. Turn on location services.</string>
+    <string name="never_miss">Never miss a remarkable spot again! With our app, you can pin locations on a map, add personalized descriptions, and save them for later access. Keep all your memories and plans right at your fingertips!</string>
+    <string name="journey_tracker">Journey Tracker</string>
+    <string name="close">Close</string>
 </resources>

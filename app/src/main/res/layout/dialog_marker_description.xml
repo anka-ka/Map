@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/colorSecondary">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/name_of_your_mark"
+        android:textSize="18sp"
+        android:textColor="?attr/colorOnPrimary"/>
+
+    <TextView
+        android:id="@+id/dialog_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/marker_description"
+        android:textSize="16sp"
+        android:textColor="?attr/colorOnPrimary"/>
+
+    <Button
+        android:id="@+id/close_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/close"
+        android:layout_gravity="end" />
+</LinearLayout>

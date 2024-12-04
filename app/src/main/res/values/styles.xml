@@ -31,4 +31,9 @@
     <style name="Widget.App.RadioButton" parent="Widget.Material3.CompoundButton.RadioButton">
         <item name="buttonTint">@color/grey</item>
             </style>
+    
+    <style name="roundedImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>

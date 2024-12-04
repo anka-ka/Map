@@ -25,4 +25,7 @@
     <string name="permission_denied">Разрешение на доступ к местоположению отклонено</string>
     <string name="try_again">Попробовать снова</string>
     <string name="failed_to_get_location">Не удалось получить местоположение. Включите службы геолокации.</string>
+    <string name="never_miss">Не упусти ни одного интересного места! С нашим приложением ты можешь отмечать любимые места на карте, добавлять к ним уникальные описания и сохранять их для последующего доступа. Теперь все воспоминания и планы — всегда под рукой!</string>
+    <string name="journey_tracker">Journey Tracker</string>
+    <string name="close">Закрыть</string>
 </resources>
