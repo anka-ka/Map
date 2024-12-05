@@ -28,4 +28,6 @@
     <string name="never_miss">Never miss a remarkable spot again! With our app, you can pin locations on a map, add personalized descriptions, and save them for later access. Keep all your memories and plans right at your fingertips!</string>
     <string name="journey_tracker">Journey Tracker</string>
     <string name="close">Close</string>
+    <string name="enter_new_description">Enter new description</string>
+    <string name="edit_marker_description">Edit Marker Description</string>
 </resources>

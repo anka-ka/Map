@@ -73,15 +73,10 @@ class MapViewModel @Inject constructor(private val repository: MapRepository) : 
 
 
     fun updateMarkerDescription(marker: Marker, newDescription: String) {
-        val currentMarkers = _markers.value?.toMutableList() ?: return
-        val index = currentMarkers.indexOf(marker)
-        if (index != -1) {
-            currentMarkers[index].description = newDescription
-            _markers.value = currentMarkers
-
-            viewModelScope.launch {
-                repository.updateMarkersOrder(currentMarkers)
-            }
+        viewModelScope.launch {
+            val updatedMarker = marker.copy(description = newDescription)
+            repository.updateMarker(updatedMarker)
+            loadMarkers()
         }
     }
 

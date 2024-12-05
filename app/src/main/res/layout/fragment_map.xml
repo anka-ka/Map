@@ -70,7 +70,7 @@
         android:layout_height="wrap_content"
         android:contentDescription="menu"
         app:iconTint="?attr/colorOnPrimary"
-        android:backgroundTint="?attr/colorPrimary"
+        android:backgroundTint="?attr/colorPrimaryVariant"
         app:srcCompat="@drawable/baseline_menu_book_24"
         android:layout_marginBottom="16dp"
         android:layout_marginStart="10sp"

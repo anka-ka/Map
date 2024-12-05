@@ -74,6 +74,7 @@ class MarkerAdapter(
         markers.clear()
         markers.addAll(newMarkers)
         diffResult.dispatchUpdatesTo(this)
+        notifyDataSetChanged()
     }
 
     fun onItemMove(fromPosition: Int, toPosition: Int) {

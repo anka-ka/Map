@@ -44,15 +44,6 @@ class MapRepository @Inject constructor(
         }
     }
 
-//    suspend fun getMarkers(): List<Marker> {
-//        return markerDao.getAllMarkers().map { markerEntity ->
-//            Marker(
-//                id = markerEntity.id,
-//                description = markerEntity.description,
-//                point = Point(markerEntity.latitude, markerEntity.longitude)
-//            )
-//        }
-//    }
 
     suspend fun saveMarker(markers: List<MarkerEntity>) {
         markers.forEach { marker ->
@@ -61,13 +52,7 @@ class MapRepository @Inject constructor(
     }
 
     suspend fun updateMarker(marker: Marker) {
-        val markerEntity = MarkerEntity(
-            id = marker.id,
-            description = marker.description,
-            latitude = marker.point.latitude,
-            longitude = marker.point.longitude,
-            order = marker.order
-        )
+        val markerEntity = marker.toEntity()
         markerDao.update(markerEntity)
     }
 
@@ -156,7 +141,7 @@ class MapRepository @Inject constructor(
         drawable.draw(canvas)
         return bitmap
     }
-    fun Marker.toEntity(): MarkerEntity {
+    private fun Marker.toEntity(): MarkerEntity {
         return MarkerEntity(
             id = this.id,
             latitude = this.point.latitude,
@@ -166,7 +151,7 @@ class MapRepository @Inject constructor(
         )
     }
 
-    fun MarkerEntity.toDomain(): Marker {
+    private fun MarkerEntity.toDomain(): Marker {
         return Marker(
             id = this.id,
             point = Point(this.latitude, this.longitude),
