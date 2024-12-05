@@ -12,3 +12,7 @@ It allows users to:
 6. On clicking on the description in the list go to the marked place on the map.
 7. Edit the description of the mark in the list and delete the mark.
 8. Change app settings: the app supports Russian and English languages, dark and light theme.
+
+  ## Demonstration of application functionality
+
+![App functionality](assets/map_animation.gif)
