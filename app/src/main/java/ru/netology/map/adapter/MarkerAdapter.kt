@@ -1,5 +1,6 @@
 package ru.netology.map.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -74,7 +75,14 @@ class MarkerAdapter(
         markers.clear()
         markers.addAll(newMarkers)
         diffResult.dispatchUpdatesTo(this)
-        notifyDataSetChanged()
+    }
+
+    fun updateMarker(marker: Marker) {
+        val index = markers.indexOfFirst { it.id == marker.id }
+        if (index != -1) {
+            markers[index] = marker
+            notifyItemChanged(index)
+        }
     }
 
     fun onItemMove(fromPosition: Int, toPosition: Int) {

@@ -76,8 +76,8 @@ class MarksMenuFragment : Fragment(R.layout.marks_menu) {
             val newDescription = editText.text.toString()
             lifecycleScope.launch {
                 viewModel.updateMarkerDescription(marker, newDescription)
+                adapter.updateMarker(marker.copy(description = newDescription))
             }
-
             dialog.dismiss()
         }
 
