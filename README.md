@@ -16,3 +16,17 @@ It allows users to:
   ## Demonstration of application functionality
 
 ![App functionality](assets/map_animation.gif)
+
+## Installation and launch 
+### Requirements: 
+* Android 7.0 and above 
+* Free space: 150 MB
+  
+### Installation:
+* Download the APK file from the release.
+* Install the APK on your device.
+
+### Launch from source:
+* Clone repository:git clone https://github.com/anka-ka/Map.git
+* Open the project in Android Studio.
+* Synchronize Gradle and run the app.
