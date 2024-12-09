@@ -17,6 +17,19 @@ It allows users to:
 
 ![App functionality](assets/map_animation.gif)
 
+
+## Technologies
+1. Kotlin – programming language.
+2. Jetpack Components:
+* Hilt – for dependency injection.
+* Room – for working with a local database.
+* Navigation Component – for managing navigation between screens.
+* ViewModel and LiveData – for state and data flow management.
+3. Material Design – for styling the user interface.
+4. Yandex MapKit – for working with map data.
+5. Flow – for handling asynchronous data streams in real time.
+6. SharedPreferences – for saving user settings.
+
 ## Installation and launch 
 ### Requirements: 
 * Android 7.0 and above 
