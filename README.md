@@ -1,7 +1,7 @@
 # Journey Tracker
 ## Project description
 This application is developed for people who are planning a trip and want to make sure they don’t miss anything.
-For example, you’re planning a trip to another city and have already come up with many ideas for how to spend your time in various places. How do you ensure you won’t forget any of these exciting spots? Of course, by planning ahead! This app allows users to mark points of interest on the map and add personalized descriptions to them. Later, when the traveler arrives at their destination, they can open a list of places they’ve planned to visit and see where they are located on the map. That’s it! A perfect vacation without missing a single detail awaits you!
+For example, you’re planning a trip to another city and have already come up with many ideas for how to spend your time in various places. How do you ensure you won’t forget any of these exciting spots? Of course, by planning ahead! This app allows users to mark points of interest on the map and add personalized descriptions to them. Later, when the travelers arrive at their destination, they can open a list of places they’ve planned to visit and see where they are located on the map. That’s it! A perfect vacation without missing a single detail awaits you!
 
 It allows users to:
 1. View your location on a map.
